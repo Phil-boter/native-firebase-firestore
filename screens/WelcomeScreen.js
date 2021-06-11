@@ -9,9 +9,7 @@ export default function WelcomeScreen({ navigation }) {
 			source={require("../assets/background.jpg")}
 		>
 			<View style={styles.titleContainer}>
-				<Text style={styles.title}>
-					Welcome to Firebase/Firestore Example
-				</Text>
+				<Text style={styles.title}>Welcome</Text>
 			</View>
 			<TouchableOpacity
 				style={styles.button}
