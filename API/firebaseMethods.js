@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import "firebase/firestore";
+
 import { Alert } from "react-native";
 
 export async function registration(email, password, lastName, firstName) {

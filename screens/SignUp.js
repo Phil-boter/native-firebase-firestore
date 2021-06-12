@@ -108,6 +108,9 @@ export default function SignUp({ navigation }) {
 					</TouchableOpacity>
 				</ScrollView>
 			</View>
+			<View>
+				<Text>*password must have al least 6 signs</Text>
+			</View>
 		</SafeAreaView>
 	);
 }

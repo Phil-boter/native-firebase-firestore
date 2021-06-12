@@ -1,38 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import firebase from "firebase/app";
 import "firebase/auth";
 import { loggingOut } from "../API/firebaseMethods";
 
-export default function Dashboard({ navigation }) {
-	let currentUserUID = firebase.auth().currentUser.uid;
-	const [firstName, setFirstName] = useState("");
-
-	const getUserInfo = async () => {
-		try {
-			let doc = await firebase
-				.firestore()
-				.collection("users")
-				.doc(currentUserUID)
-				.get();
-
-			if (!doc.exists) {
-				Alert.alert("No user data found!");
-				navigation.replace("Home");
-			} else {
-				let dataObj = doc.data();
-				setFirstName(dataObj.firstName);
-			}
-		} catch (error) {
-			console.log("error", error);
-		}
-	};
-
-	useEffect(() => {
-		getUserInfo();
-	});
-
+export default function GalleryScreen({ navigation }) {
 	const handlePress = () => {
 		loggingOut();
 		navigation.navigate("Home", { screen: "WelcomeScreen" });
@@ -40,8 +12,8 @@ export default function Dashboard({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.titleText}>Dashboard</Text>
-			<Text style={styles.text}>Hi {firstName}</Text>
+			<Text style={styles.titleText}>Gallery</Text>
+
 			<TouchableOpacity style={styles.button} onPress={handlePress}>
 				<Text style={styles.buttonText}>Log Out</Text>
 			</TouchableOpacity>

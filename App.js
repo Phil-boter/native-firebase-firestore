@@ -1,13 +1,14 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import apiKeys from "./config/keys";
+
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SignUp from "./screens/SignUp";
 import SignIn from "./screens/SignIn";
 import LoadingScreen from "./screens/LoadingScreen";
-import Dashboard from "./screens/Dashboard";
+import DrawerNavigator from "./navigators/DrawerNavigator";
 
 const Stack = createStackNavigator();
 
@@ -40,9 +41,10 @@ export default function App() {
 					component={SignIn}
 					options={{ headerShown: false }}
 				/>
+
 				<Stack.Screen
-					name={"Dashboard"}
-					component={Dashboard}
+					name={"DrawerNavigator"}
+					component={DrawerNavigator}
 					options={{ headerShown: false }}
 				/>
 			</Stack.Navigator>

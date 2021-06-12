@@ -13,5 +13,5 @@ web-build/
 .DS_Store
  
 secrets.json
-google-services.json
 config/keys.js
+.env
