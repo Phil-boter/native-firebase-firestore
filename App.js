@@ -33,7 +33,10 @@ import LandingScreen from "./components/auth/Landing";
 import LoginScreen from "./components/auth/Login";
 import RegisterScreen from "./components/auth/Register";
 
-import Dashboard from "./screens/Dashboard";
+import MainScreen from "./components/Main";
+import AddScreen from "./components/main/Add";
+import CommentScreen from "./components/main/Comment";
+import SaveScreen from "./components/main/Save";
 
 const Stack = createStackNavigator();
 
@@ -68,25 +71,23 @@ export default function App() {
 		<Provider store={store}>
 			<NavigationContainer>
 				<Stack.Navigator initialRouteName="Main">
-					<Stack.Screen name="Dashboard" component={Dashboard} />
-					{/* <Stack.Screen name="Main" component={MainScreen} />
-						<Stack.Screen
-							name="Add"
-							component={AddScreen}
-							navigation={this.props.navigation}
-						/>
-						<Stack.Screen
-							name="Save"
-							component={SaveScreen}
-							navigation={this.props.navigation}
-						/>
-						<Stack.Screen
-							name="Comment"
-							component={CommentScreen}
-							navigation={this.props.navigation}
-						/> */}
+					<Stack.Screen name="Main" component={MainScreen} />
+					<Stack.Screen
+						name="Add"
+						component={AddScreen}
+						// navigation={Navigator.navigation}
+					/>
+					<Stack.Screen
+						name="Save"
+						component={SaveScreen}
+						// navigation={Navigator.navigation}
+					/>
+					<Stack.Screen
+						name="Comment"
+						component={CommentScreen}
+						// navigation={Navigator.navigation}
+					/>
 				</Stack.Navigator>
-				<Text>Hello</Text>
 			</NavigationContainer>
 		</Provider>
 	) : (
