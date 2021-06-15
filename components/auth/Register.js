@@ -41,7 +41,7 @@ export default function Register({ navigation }) {
 			Alert.alert("Password does not match!");
 		} else {
 			registration(email, password, lastName, firstName);
-			navigation.navigate("Loading");
+			navigation.navigate("Main");
 			emptyState();
 		}
 	};

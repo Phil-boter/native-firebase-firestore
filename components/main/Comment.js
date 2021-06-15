@@ -4,34 +4,42 @@ import { View, Text, FlatList, Button, TextInput } from "react-native";
 import firebase from "firebase";
 require("firebase/firestore");
 
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { fetchUsersData } from "../../redux/actions/index";
+import { useDispatch, useSelector } from "react-redux";
 
-function Comment(props) {
+import { fetchUsersData, fetchUser } from "../../redux/actions/index";
+
+export default function Comment(props) {
+	console.log("props in commentScreen", props);
+	const dispatch = useDispatch();
+
+	const currentUser = useSelector((state) => {
+		console.log("state", state.userState.currentUser.uid);
+		return state.userState.currentUser;
+	});
+	console.log("currentuser", currentUser);
 	const [comments, setComments] = useState([]);
 	const [postId, setPostId] = useState("");
 	const [text, setText] = useState("");
+	function matchUserToComment(comments) {
+		console.log("comments", comments);
+		for (let i = 0; i < comments.length; i++) {
+			if (comments[i].hasOwnProperty("user")) {
+				continue;
+			}
+
+			const user = currentUser.find((x) => x.uid === comments[i].creator);
+			console.log("user in comment ", user);
+			if (user == undefined) {
+				dispatch(fetchUsersData(comments[i].creator, false));
+			} else {
+				comments[i].user = user;
+			}
+		}
+		setComments(comments);
+	}
 
 	useEffect(() => {
-		function matchUserToComment(comments) {
-			for (let i = 0; i < comments.length; i++) {
-				if (comments[i].hasOwnProperty("user")) {
-					continue;
-				}
-
-				const user = props.users.find(
-					(x) => x.uid === comments[i].creator
-				);
-				if (user == undefined) {
-					props.fetchUsersData(comments[i].creator, false);
-				} else {
-					comments[i].user = user;
-				}
-			}
-			setComments(comments);
-		}
-
+		dispatch(fetchUser());
 		if (props.route.params.postId !== postId) {
 			firebase
 				.firestore()
@@ -96,10 +104,10 @@ function Comment(props) {
 	);
 }
 
-const mapStateToProps = (store) => ({
-	users: store.usersState.users,
-});
-const mapDispatchProps = (dispatch) =>
-	bindActionCreators({ fetchUsersData }, dispatch);
+// const mapStateToProps = (store) => ({
+// 	users: store.usersState.users,
+// });
+// const mapDispatchProps = (dispatch) =>
+// 	bindActionCreators({ fetchUsersData }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchProps)(Comment);
+// export default connect(mapStateToProps, mapDispatchProps)(Comment);

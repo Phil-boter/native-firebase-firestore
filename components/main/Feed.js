@@ -3,23 +3,52 @@ import { StyleSheet, View, Text, Image, FlatList, Button } from "react-native";
 
 import firebase from "firebase";
 import "firebase/firestore";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
-function Feed(props) {
+export default function Feed({ navigation }) {
+	let wallPosts = [];
+
+	const currentUser = useSelector((state) => {
+		return state.userState.currentUser;
+	});
+
+	const feed = useSelector((state) => {
+		return state.userState.posts;
+	});
+
 	const [posts, setPosts] = useState([]);
+	const [user, setUser] = useState({});
+
+	console.log("feed in feed state", feed);
+	console.log("feed in curentUser state", currentUser);
+	console.log("posts in wallPosts state", wallPosts);
 
 	useEffect(() => {
-		if (
-			props.usersFollowingLoaded == props.following.length &&
-			props.following.length !== 0
-		) {
-			props.feed.sort(function (x, y) {
-				return x.creation - y.creation;
-			});
-			setPosts(props.feed);
-		}
-		console.log(posts);
-	}, [props.usersFollowingLoaded, props.feed]);
+		// 	console.log("props.feed", props);
+		// 	if (
+		// 		props.usersFollowingLoaded == props.following.length &&
+		// 		props.following.length !== 0
+		// 	) {
+		// 		props.feed.sort(function (x, y) {
+		// 			return x.creation - y.creation;
+		// 		});
+		setUser(currentUser);
+		setPosts(feed);
+	}, [feed, posts, user]);
+
+	if (!feed) {
+		return (
+			<View>
+				<Text>loading</Text>
+			</View>
+		);
+	} else {
+		wallPosts = feed.map((obj) => ({
+			...obj,
+			user: currentUser,
+		}));
+	}
+	console.log("posts in feed state", wallPosts);
 
 	const onLikePress = (userId, postId) => {
 		firebase
@@ -49,11 +78,11 @@ function Feed(props) {
 				<FlatList
 					numColumns={1}
 					horizontal={false}
-					data={posts}
+					data={wallPosts}
 					renderItem={({ item }) => (
 						<View style={styles.containerImage}>
 							<Text style={styles.container}>
-								{item.user.name}
+								{item.user.firstName}
 							</Text>
 							<Image
 								style={styles.image}
@@ -63,7 +92,10 @@ function Feed(props) {
 								<Button
 									title="Dislike"
 									onPress={() =>
-										onDislikePress(item.user.uid, item.id)
+										onDislikePress(
+											item.user.uid,
+											item.creation.id
+										)
 									}
 								/>
 							) : (
@@ -76,7 +108,7 @@ function Feed(props) {
 							)}
 							<Text
 								onPress={() =>
-									props.navigation.navigate("Comment", {
+									navigation.navigate("Comment", {
 										postId: item.id,
 										uid: item.user.uid,
 									})
@@ -110,10 +142,10 @@ const styles = StyleSheet.create({
 		aspectRatio: 1 / 1,
 	},
 });
-const mapStateToProps = (store) => ({
-	currentUser: store.userState.currentUser,
-	following: store.userState.following,
-	feed: store.usersState.feed,
-	usersFollowingLoaded: store.usersState.usersFollowingLoaded,
-});
-export default connect(mapStateToProps, null)(Feed);
+// const mapStateToProps = (store) => ({
+// 	currentUser: store.userState.currentUser,
+// 	following: store.userState.following,
+// 	feed: store.usersState.feed,
+// 	usersFollowingLoaded: store.usersState.usersFollowingLoaded,
+// });
+// export default connect(mapStateToProps, null)(Feed);

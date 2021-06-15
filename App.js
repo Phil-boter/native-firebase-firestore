@@ -24,16 +24,21 @@ if (!firebase.apps.length) {
 //---------------- setup Redux ----------------------
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
+import reduxPromise from "redux-promise";
 import rootReducer from "./redux/reducers";
-import thunk from "redux-thunk";
-const store = createStore(rootReducer, applyMiddleware(thunk));
+// import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+const store = createStore(
+	rootReducer,
+	composeWithDevTools(applyMiddleware(reduxPromise))
+);
 //---------------- setup Redux/END ----------------------
 
 import LandingScreen from "./components/auth/Landing";
 import LoginScreen from "./components/auth/Login";
 import RegisterScreen from "./components/auth/Register";
 
-import MainScreen from "./components/Main";
+import MainScreen from "./screens/Main";
 import AddScreen from "./components/main/Add";
 import CommentScreen from "./components/main/Comment";
 import SaveScreen from "./components/main/Save";
@@ -67,30 +72,7 @@ export default function App() {
 			</View>
 		);
 	}
-	return loggedIn ? (
-		<Provider store={store}>
-			<NavigationContainer>
-				<Stack.Navigator initialRouteName="Main">
-					<Stack.Screen name="Main" component={MainScreen} />
-					<Stack.Screen
-						name="Add"
-						component={AddScreen}
-						// navigation={Navigator.navigation}
-					/>
-					<Stack.Screen
-						name="Save"
-						component={SaveScreen}
-						// navigation={Navigator.navigation}
-					/>
-					<Stack.Screen
-						name="Comment"
-						component={CommentScreen}
-						// navigation={Navigator.navigation}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</Provider>
-	) : (
+	return !loggedIn ? (
 		<NavigationContainer>
 			<Stack.Navigator initialRouteName="Landing">
 				<Stack.Screen
@@ -102,5 +84,30 @@ export default function App() {
 				<Stack.Screen name="Login" component={LoginScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
+	) : (
+		<Provider store={store}>
+			<NavigationContainer>
+				<Stack.Navigator initialRouteName="Main">
+					<Stack.Screen name="Main" component={MainScreen} />
+					{/* <Stack.Screen
+						name="Add"
+						component={AddScreen}
+						// navigation={Navigator.navigation}
+					/>
+					<Stack.Screen
+						name="Save"
+						component={SaveScreen}
+						// navigation={Navigator.navigation}
+					/>
+
+					<Stack.Screen
+						name="Comment"
+						component={CommentScreen}
+
+						// navigation={navigation}
+					/> */}
+				</Stack.Navigator>
+			</NavigationContainer>
+		</Provider>
 	);
 }
