@@ -42,6 +42,8 @@ import MainScreen from "./screens/Main";
 import AddScreen from "./components/main/Add";
 import CommentScreen from "./components/main/Comment";
 import SaveScreen from "./components/main/Save";
+import SaveProfilePicScreen from "./components/profile/SaveProfilePic";
+import ProfilePicUploaderScreen from "./components/profile/ProfilePicUploader";
 
 const Stack = createStackNavigator();
 
@@ -92,20 +94,31 @@ export default function App() {
 					{/* <Stack.Screen
 						name="Add"
 						component={AddScreen}
-						// navigation={Navigator.navigation}
-					/>
-					<Stack.Screen
+						options={{ navigation: Navigator.navigation }}
+					/> */}
+					{/* <Stack.Screen
 						name="Save"
 						component={SaveScreen}
-						// navigation={Navigator.navigation}
-					/>
-
-					<Stack.Screen
+						options={{ navigation: Navigator.navigation }}
+					/> */}
+					{/* <Stack.Screen
 						name="Comment"
 						component={CommentScreen}
 
 						// navigation={navigation}
-					/> */}
+					/>
+
+					*/}
+					<Stack.Screen
+						name="SaveProfilePic"
+						component={SaveProfilePicScreen}
+						// options={{ navigation: Navigator.navigation }}
+					/>
+					<Stack.Screen
+						name="ProfilePicUploader"
+						component={ProfilePicUploaderScreen}
+						// options={{ navigation: Navigator.navigation }}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</Provider>

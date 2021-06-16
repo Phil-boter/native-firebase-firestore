@@ -14,7 +14,8 @@ import {
 } from "../redux/actions/index";
 
 // import FeedScreen from "../components/main/Feed";
-import ProfileScreen from "../components/main/Profile";
+import ProfileScreen from "../components/profile/Profile";
+import ProfilePicUploader from "../components/profile/ProfilePicUploader";
 // import SearchScreen from "../components/main/Search";
 
 const Tab = createMaterialBottomTabNavigator();

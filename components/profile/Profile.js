@@ -6,30 +6,35 @@ require("firebase/firestore");
 import { useSelector } from "react-redux";
 import BioEditor from "./BioEditor";
 
-export default function Profile({ navigation, uid }) {
+import ProfilePic from "./ProfilePic";
+
+export default function Profile({ navigation }) {
 	const user = useSelector((state) => {
 		return state.userState.currentUser;
 	});
 	const userBio = useSelector((state) => {
 		return state.userState.bio;
 	});
+	const [userImage, setUserImage] = useState("");
 
-	// useEffect(() => {
-	// 	// const { currentUser, posts } = props;
-
-	// 	firebase
-	// 		.firestore()
-	// 		.collection("users")
-	// 		.doc(uid)
-	// 		.get()
-	// 		.then((snapshot) => {
-	// 			if (snapshot.exists) {
-	// 				setUser(snapshot.data());
-	// 			} else {
-	// 				console.log("does not exist");
-	// 			}
-	// 		});
-	// }, [user]);
+	useEffect(() => {
+		// const uid = firebase.auth().currentUser.uid;
+		if (user) {
+			firebase
+				.firestore()
+				.collection("profile")
+				.doc(user.userId)
+				.get()
+				.then((snapshot) => {
+					if (snapshot.exists) {
+						console.log("data", snapshot.data());
+						setUserImage(snapshot.data());
+					} else {
+						console.log("does not exist");
+					}
+				});
+		}
+	}, [user]);
 
 	const onLogout = () => {
 		firebase.auth().signOut();
@@ -43,8 +48,15 @@ export default function Profile({ navigation, uid }) {
 		<View>
 			<Text>{user.firstName}</Text>
 			<Text>{user.lastName}</Text>
+			<ProfilePic userImage={userImage} />
 			<Text>{user.email}</Text>
 			<BioEditor userBio={userBio} />
+			{/* <Button title="proImg" onPress={() => setUploader(true)}></Button> */}
+			<Button
+				title="ProImg"
+				onPress={() => navigation.navigate("ProfilePicUploader")}
+			/>
+			{/* <Button title="ProImg" onPress={() => setUploader(true)} /> */}
 			<Button title="Logout" onPress={() => onLogout()} />
 		</View>
 	);
