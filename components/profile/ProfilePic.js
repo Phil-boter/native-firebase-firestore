@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import {
-	StyleSheet,
-	View,
-	Text,
-	Image,
-	FlatList,
-	Button,
-	TouchableOpacity,
-} from "react-native";
-import background from "../../assets/background.jpg";
+import { Image, TouchableOpacity } from "react-native";
 
 export default function ProfilePic({ navigation }) {
-	console.log("navigation", navigation);
 	const userImage = useSelector((state) => {
 		return state.userState.userPic;
 	});

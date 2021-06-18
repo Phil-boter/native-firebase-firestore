@@ -92,24 +92,9 @@ export default function App() {
 			<NavigationContainer>
 				<Stack.Navigator initialRouteName="Main">
 					<Stack.Screen name="Main" component={MainScreen} />
-					{/* <Stack.Screen
-						name="Add"
-						component={AddScreen}
-						options={{ navigation: Navigator.navigation }}
-					/> */}
-					{/* <Stack.Screen
-						name="Save"
-						component={SaveScreen}
-						options={{ navigation: Navigator.navigation }}
-					/> */}
-					{/* <Stack.Screen
-						name="Comment"
-						component={CommentScreen}
-
-						// navigation={navigation}
-					/>
-
-					*/}
+					<Stack.Screen name="Add" component={AddScreen} />
+					<Stack.Screen name="Save" component={SaveScreen} />
+					<Stack.Screen name="Comment" component={CommentScreen} />
 					<Stack.Screen
 						name="ProfileEditor"
 						component={ProfileEditorScreen}
@@ -117,12 +102,10 @@ export default function App() {
 					<Stack.Screen
 						name="SaveProfilePic"
 						component={SaveProfilePicScreen}
-						// options={{ navigation: Navigator.navigation }}
 					/>
 					<Stack.Screen
 						name="ProfilePicUploader"
 						component={ProfilePicUploaderScreen}
-						// options={{ navigation: Navigator.navigation }}
 					/>
 				</Stack.Navigator>
 			</NavigationContainer>

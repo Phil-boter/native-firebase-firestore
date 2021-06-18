@@ -6,12 +6,6 @@ import {
 	GET_USER_PIC,
 } from "../constants";
 
-// const initialState = {
-// 	currentUser: null,
-// 	posts: [],
-// 	following: [],
-// };
-
 export const user = (state = {}, action) => {
 	switch (action.type) {
 		case GET_USER_DATA:
@@ -22,14 +16,14 @@ export const user = (state = {}, action) => {
 			};
 
 		case GET_USER_BIO:
-			console.log("reducer get bio");
+			// console.log("reducer get bio");
 			return {
 				...state,
 				bio: action.bio,
 			};
 
 		case GET_USER_PIC:
-			console.log("reducer get userPic");
+			// console.log("reducer get userPic");
 			return {
 				...state,
 				userPic: action.userPic,

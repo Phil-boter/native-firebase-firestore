@@ -9,8 +9,6 @@ require("firebase/firestore");
 require("firebase/firebase-storage");
 
 export default function SaveProfilePic(props) {
-	console.log(props);
-
 	const userPic = useSelector((state) => {
 		return state.userState.userPic;
 	});
@@ -65,21 +63,21 @@ export default function SaveProfilePic(props) {
 				Alert.alert("There is something wrong!!!!", err.message);
 			});
 	};
-	console.log(props.route.params.image);
+
 	return (
 		<View
 			style={{
 				flex: 1,
 				display: "flex",
 				justifyContent: "center",
-				alignContent: "center",
+				alignItems: "center",
 			}}
 		>
 			<Image
 				source={{ uri: props.route.params.image }}
 				style={{
-					width: 300,
-					height: 300,
+					width: 250,
+					height: 250,
 					marginLeft: "auto",
 					marginRight: "auto",
 				}}

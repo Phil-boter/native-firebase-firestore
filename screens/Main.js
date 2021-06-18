@@ -14,9 +14,8 @@ import {
 	// clearData,
 } from "../redux/actions/index";
 
-// import FeedScreen from "../components/main/Feed";
+import FeedScreen from "../components/main/Feed";
 import ProfileScreen from "../components/profile/Profile";
-import ProfilePicUploader from "../components/profile/ProfilePicUploader";
 // import SearchScreen from "../components/main/Search";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -33,6 +32,7 @@ export default function Main({ navigation }) {
 			dispatch(fetchUser());
 			dispatch(fetchUserBio());
 			dispatch(fetchUserPic());
+			dispatch(fetchUserPosts());
 			// dispatch(fetchUserFollowing());
 		} catch (error) {
 			console.log(error);
@@ -40,13 +40,12 @@ export default function Main({ navigation }) {
 	}
 
 	useEffect(() => {
-		// dispatch(clearData());
 		FetchData();
 	}, []);
 
 	return (
 		<Tab.Navigator>
-			{/* <Tab.Screen
+			<Tab.Screen
 				name="Feed"
 				component={FeedScreen}
 				options={{
@@ -58,7 +57,7 @@ export default function Main({ navigation }) {
 						/>
 					),
 				}}
-			/> */}
+			/>
 			{/* <Tab.Screen
 				name="Search"
 				component={SearchScreen}
@@ -73,7 +72,7 @@ export default function Main({ navigation }) {
 					),
 				}}
 			/>*/}
-			{/* <Tab.Screen
+			<Tab.Screen
 				name="AddContainer"
 				component={EmptyScreen}
 				listeners={({ navigation }) => ({
@@ -91,7 +90,7 @@ export default function Main({ navigation }) {
 						/>
 					),
 				}}
-			/> */}
+			/>
 			<Tab.Screen
 				name="Profile"
 				component={ProfileScreen}
@@ -116,14 +115,3 @@ export default function Main({ navigation }) {
 		</Tab.Navigator>
 	);
 }
-
-// const mapStateToProps = (store) => ({
-// 	currentUser: store.userState.currentUser,
-// });
-// const mapDispatchProps = (dispatch) =>
-// 	bindActionCreators(
-// 		{ fetchUser, fetchUserPosts, fetchUserFollowing, clearData },
-// 		dispatch
-// 	);
-
-// export default connect(mapStateToProps, mapDispatchProps)(Main);

@@ -9,11 +9,17 @@ import {
 	FlatList,
 	Button,
 	TextInput,
+	Alert,
 } from "react-native";
 
 import ProfilePic from "./ProfilePic";
 
-import { fetchUserBio, fetchUserPic, uploadBio } from "../../redux/actions";
+import {
+	fetchUser,
+	fetchUserBio,
+	fetchUserPic,
+	uploadBio,
+} from "../../redux/actions";
 
 import firebase from "firebase/app";
 require("firebase/firestore");
@@ -30,8 +36,8 @@ export default function BioEditor({ navigation }) {
 		// dispatch(uploadBio(bio));
 		bioUpload(bio);
 		setTextInputVisible(false);
-		dispatch(fetchUserBio());
-		dispatch(fetchUserPic());
+		// dispatch(fetchUserBio());
+		// dispatch(fetchUserPic());
 	};
 
 	const bioUpload = (bio) => {
@@ -46,6 +52,9 @@ export default function BioEditor({ navigation }) {
 			})
 			.then(() => {
 				console.log("bio upload succefull");
+				dispatch(fetchUserBio());
+				Alert.alert(`New Bio uploaded!`);
+				navigation.popToTop();
 			})
 			.catch((err) => {
 				console.log(err);

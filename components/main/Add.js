@@ -78,7 +78,7 @@ export default function Add({ navigation }) {
 				title="Save"
 				onPress={() => navigation.navigate("Save", { image })}
 			/>
-			{image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+			{/* {image && <Image source={{ uri: image }} style={{ flex: 1 }} />} */}
 		</View>
 	);
 }

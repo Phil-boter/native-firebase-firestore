@@ -56,8 +56,24 @@ export default function Save(props) {
 			});
 	};
 	return (
-		<View style={{ flex: 1 }}>
-			<Image source={{ uri: props.route.params.image }} />
+		<View
+			style={{
+				flex: 1,
+				flexDirection: "column",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			}}
+		>
+			<Image
+				source={{
+					uri: props.route.params.image,
+					height: 250,
+					width: 250,
+					marginLeft: "auto",
+					marginRight: "auto",
+				}}
+			/>
 			<TextInput
 				placeholder="Write a Caption . . ."
 				onChangeText={(caption) => setCaption(caption)}
