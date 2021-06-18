@@ -1,12 +1,12 @@
 import {
 	GET_USER_DATA,
-	UPDATE_USER_BIO,
 	GET_USER_BIO,
 	USER_POSTS_STATE_CHANGE,
 	USER_FOLLOWING_STATE_CHANGE,
 	USERS_DATA_STATE_CHANGE,
 	USERS_POSTS_STATE_CHANGE,
 	USERS_LIKES_STATE_CHANGE,
+	GET_USER_PIC,
 } from "../constants/index";
 import { Alert } from "react-native";
 import firebase from "firebase";
@@ -41,56 +41,46 @@ export async function fetchUser() {
 	}
 }
 
-export async function uploadBio(bio) {
-	console.log("action uploadBio", bio);
-	// console.log("uid", firebase.auth().currentUser.uid);
-	try {
-		const userBio = await firebase
-			.firestore()
-			.collection("profile")
-			.doc(firebase.auth().currentUser.uid)
-			.collection("userBio")
-			.add({
-				bio: bio,
-				creation: firebase.firestore.FieldValue.serverTimestamp(),
-			});
-
-		return {
-			type: UPDATE_USER_BIO,
-			currentUser: userBio,
-		};
-	} catch (err) {
-		console.log("bio upload NOT succefull");
-		Alert.alert("There is something wrong!!!!", err.message);
-	}
-}
 export async function fetchUserBio() {
 	console.log("action fetchuserBio");
 	try {
-		const docBio = await firebase
+		const bio = await firebase
 			.firestore()
-			.collection("profile")
-			.doc(firebase.auth().currentUser.uid)
 			.collection("userBio")
-			.orderBy("creation", "desc")
-			.limit(1)
+			.doc(firebase.auth().currentUser.uid)
 			.get();
-
-		console.log("docBio", docBio);
-		let bio = docBio.docs.map((doc) => {
-			const data = doc.data();
-			console.log("doc,data", data);
-			const id = doc.id;
-			return { id, ...data };
-		});
-		console.log("BIO", bio);
+		console.log("BIO", bio.data());
 
 		return {
 			type: GET_USER_BIO,
-			bio: bio,
+			bio: bio.data(),
 		};
 	} catch (err) {
 		console.log("bio fetch NOT succefull");
+		Alert.alert("There is something wrong!!!!", err.message);
+	}
+}
+
+export async function fetchUserPic() {
+	console.log("action fetchUserPic");
+	try {
+		const userPic = await firebase
+			.firestore()
+			.collection("userPic")
+			.doc(firebase.auth().currentUser.uid)
+			.get();
+
+		if (userPic) {
+			console.log("action GET UserPic success");
+			return {
+				type: GET_USER_PIC,
+				userPic: userPic.data(),
+			};
+		} else {
+			console.log("UserPic does not exist");
+		}
+	} catch (err) {
+		console.log("fetch userPic NOT succefull");
 		Alert.alert("There is something wrong!!!!", err.message);
 	}
 }

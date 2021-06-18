@@ -1,43 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, Button } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
+
+import {
+	fetchUser,
+	fetchUserBio,
+	fetchUserPic,
+	// clearData,
+} from "../../redux/actions";
+
+import { useDispatch, useSelector } from "react-redux";
 
 import firebase from "firebase/app";
 require("firebase/firestore");
-import { useSelector } from "react-redux";
-import BioEditor from "./BioEditor";
 
+import BioEditor from "./BioEditor";
 import ProfilePic from "./ProfilePic";
 
 export default function Profile({ navigation }) {
+	const dispatch = useDispatch();
 	const user = useSelector((state) => {
 		return state.userState.currentUser;
 	});
-	const userBio = useSelector((state) => {
+	const bio = useSelector((state) => {
 		return state.userState.bio;
 	});
-	const [userImage, setUserImage] = useState("");
-
+	console.log("bio in profile", bio);
 	useEffect(() => {
-		// const uid = firebase.auth().currentUser.uid;
-		if (user) {
-			firebase
-				.firestore()
-				.collection("profile")
-				.doc(user.userId)
-				.get()
-				.then((snapshot) => {
-					if (snapshot.exists) {
-						console.log("data", snapshot.data());
-						setUserImage(snapshot.data());
-					} else {
-						console.log("does not exist");
-					}
-				});
-		}
-	}, [user]);
+		dispatch(fetchUser());
+		dispatch(fetchUserBio());
+		dispatch(fetchUserPic());
+	}, []);
 
 	const onLogout = () => {
 		firebase.auth().signOut();
+	};
+
+	const renderBio = (bio) => {
+		if (!bio) {
+			return <Text>No bio yet</Text>;
+		} else {
+			return <Text>{bio.bio}</Text>;
+		}
 	};
 
 	return !user ? (
@@ -46,17 +49,18 @@ export default function Profile({ navigation }) {
 		</View>
 	) : (
 		<View>
-			<Text>{user.firstName}</Text>
-			<Text>{user.lastName}</Text>
-			<ProfilePic userImage={userImage} />
+			<Text>
+				{user.firstName} {user.lastName}
+			</Text>
+
+			<ProfilePic navigation={navigation} />
+
 			<Text>{user.email}</Text>
-			<BioEditor userBio={userBio} />
-			{/* <Button title="proImg" onPress={() => setUploader(true)}></Button> */}
+			<View>{renderBio(bio)}</View>
 			<Button
-				title="ProImg"
-				onPress={() => navigation.navigate("ProfilePicUploader")}
+				title="Edit Profile"
+				onPress={() => navigation.navigate("ProfileEditor")}
 			/>
-			{/* <Button title="ProImg" onPress={() => setUploader(true)} /> */}
 			<Button title="Logout" onPress={() => onLogout()} />
 		</View>
 	);
@@ -117,9 +121,3 @@ const styles = StyleSheet.create({
 		aspectRatio: 1 / 1,
 	},
 });
-// const mapStateToProps = (store) => ({
-// 	currentUser: store.userState.currentUser,
-// 	posts: store.userState.posts,
-// 	following: store.userState.following,
-// });
-// export default connect(mapStateToProps, null)(Profile);

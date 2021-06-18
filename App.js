@@ -44,6 +44,7 @@ import CommentScreen from "./components/main/Comment";
 import SaveScreen from "./components/main/Save";
 import SaveProfilePicScreen from "./components/profile/SaveProfilePic";
 import ProfilePicUploaderScreen from "./components/profile/ProfilePicUploader";
+import ProfileEditorScreen from "./components/profile/BioEditor";
 
 const Stack = createStackNavigator();
 
@@ -109,6 +110,10 @@ export default function App() {
 					/>
 
 					*/}
+					<Stack.Screen
+						name="ProfileEditor"
+						component={ProfileEditorScreen}
+					/>
 					<Stack.Screen
 						name="SaveProfilePic"
 						component={SaveProfilePicScreen}

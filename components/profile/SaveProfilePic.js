@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { View, TextInput, Image, Button } from "react-native";
+import { View, TextInput, Image, Button, Alert } from "react-native";
 
 import firebase from "firebase";
-import { NavigationContainer } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { fetchUserPic } from "../../redux/actions";
+import { useSelector } from "react-redux";
 require("firebase/firestore");
 require("firebase/firebase-storage");
 
 export default function SaveProfilePic(props) {
 	console.log(props);
+
+	const userPic = useSelector((state) => {
+		return state.userState.userPic;
+	});
+
+	const dispatch = useDispatch();
+
 	const uploadImage = async () => {
 		const uri = props.route.params.image;
 		const childPath = `post/${
@@ -26,38 +35,60 @@ export default function SaveProfilePic(props) {
 
 		const taskCompleted = () => {
 			task.snapshot.ref.getDownloadURL().then((snapshot) => {
-				savePostData(snapshot);
-				console.log(snapshot);
+				saveUserImage(snapshot);
 			});
 		};
 
 		const taskError = (snapshot) => {
 			console.log(snapshot);
 		};
-
 		task.on("state_changed", taskProgress, taskError, taskCompleted);
 	};
 
-	const savePostData = (downloadURL) => {
+	const saveUserImage = (downloadURL) => {
 		firebase
 			.firestore()
-			.collection("profile")
+			.collection("userPic")
 			.doc(firebase.auth().currentUser.uid)
 			.set({
-				image: downloadURL,
+				userPic: downloadURL,
 				creation: firebase.firestore.FieldValue.serverTimestamp(),
 			})
-			.then(function () {
-				console.log("image was saved");
+			.then(() => {
+				console.log("New Image uploaded");
+				Alert.alert("New Image uploaded");
+				dispatch(fetchUserPic());
 				props.navigation.popToTop();
 			})
 			.catch((error) => {
-				console.error("Error saving image: ", error);
+				console.log("upload userImage NOT succefull");
+				Alert.alert("There is something wrong!!!!", err.message);
 			});
 	};
+	console.log(props.route.params.image);
 	return (
-		<View style={{ flex: 1 }}>
-			<Image source={{ uri: props.route.params.image }} />
+		<View
+			style={{
+				flex: 1,
+				display: "flex",
+				justifyContent: "center",
+				alignContent: "center",
+			}}
+		>
+			<Image
+				source={{ uri: props.route.params.image }}
+				style={{
+					width: 300,
+					height: 300,
+					marginLeft: "auto",
+					marginRight: "auto",
+				}}
+			/>
+			<Button
+				title="retake"
+				onPress={() => props.navigation.navigate("ProfileEditor")}
+			/>
+
 			<Button title="Save" onPress={() => uploadImage()} />
 		</View>
 	);

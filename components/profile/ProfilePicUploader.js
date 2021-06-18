@@ -74,11 +74,17 @@ export default function ProfilePicUploader({ navigation }) {
 				title="Pick Image From Gallery"
 				onPress={() => pickImage()}
 			/>
-			<Button
-				title="Save"
-				onPress={() => navigation.navigate("SaveProfilePic", { image })}
-			/>
-			{image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+			{image && (
+				<View>
+					<Button
+						title="Save"
+						onPress={() =>
+							navigation.navigate("SaveProfilePic", { image })
+						}
+					/>
+					<Image source={{ uri: image }} style={{ flex: 1 }} />
+				</View>
+			)}
 		</View>
 	);
 }

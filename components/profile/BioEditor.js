@@ -11,111 +11,78 @@ import {
 	TextInput,
 } from "react-native";
 
-import { uploadBio } from "../../redux/actions";
+import ProfilePic from "./ProfilePic";
+
+import { fetchUserBio, fetchUserPic, uploadBio } from "../../redux/actions";
 
 import firebase from "firebase/app";
 require("firebase/firestore");
 
-export default function BioEditor({ navigation, userBio }) {
+export default function BioEditor({ navigation }) {
+	// console.log("userbio", userBio);
 	const dispatch = useDispatch();
 
 	const [bio, setBio] = useState("");
 	const [textareaVisible, setTextInputVisible] = useState(false);
 
-	if (textareaVisible === false) {
-		if (bio || userBio) {
-			return (
+	const handleUpload = (bio) => {
+		console.log("BIO", bio);
+		// dispatch(uploadBio(bio));
+		bioUpload(bio);
+		setTextInputVisible(false);
+		dispatch(fetchUserBio());
+		dispatch(fetchUserPic());
+	};
+
+	const bioUpload = (bio) => {
+		console.log("bio in bioUpload", bio);
+		firebase
+			.firestore()
+			.collection("userBio")
+			.doc(firebase.auth().currentUser.uid)
+			.set({
+				bio: bio,
+				creation: firebase.firestore.FieldValue.serverTimestamp(),
+			})
+			.then(() => {
+				console.log("bio upload succefull");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	return (
+		<View>
+			<ProfilePic navigation={navigation} />
+			{textareaVisible === true ? (
 				<View>
-					<Text>About me</Text>
-					{userBio ? (
-						userBio.map((item, idx) => (
-							<Text key={idx}>{item.bio}</Text>
-						))
-					) : (
-						<Text>{bio}</Text>
-					)}
+					<Button title="Upload" onPress={() => handleUpload(bio)} />
 					<Button
-						title="Edit"
-						onPress={() => setTextInputVisible(true)}
+						title="ProImg"
+						onPress={() =>
+							navigation.navigate("ProfilePicUploader")
+						}
 					/>
 				</View>
-			);
-		} else if (!bio) {
-			return (
+			) : (
 				<View>
-					<Text>Tell us something about yourself</Text>
+					<TextInput
+						onChangeText={(text) => setBio(text)}
+						value={bio}
+						placeholder="write new bio here"
+					/>
+					<Button title="Upload" onPress={() => handleUpload(bio)} />
 					<Button
-						title=" Add your bio now"
-						onPress={() => setTextInputVisible(true)}
+						title="ProImg"
+						onPress={() =>
+							navigation.navigate("ProfilePicUploader")
+						}
 					/>
 				</View>
-			);
-		}
-	} else {
-		return (
-			<View>
-				<TextInput
-					onChangeText={(text) => setBio(text)}
-					value={bio}
-					placeholder="write something here"
-				/>
-				<Button
-					title="Upload"
-					onPress={() => dispatch(uploadBio(bio))}
-				/>
-			</View>
-		);
-	}
-
-	// return !user ? (
-	// 	<View>
-	// 		<Text>loading</Text>
-	// 	</View>
-	// ) : (
-	// 	<View>
-	// 		<Text>{user.firstName}</Text>
-	// 		<Text>{user.lastName}</Text>
-	// 		<Text>{user.email}</Text>
-	// 		<Button title="Logout" onPress={() => onLogout()} />
-	// 	</View>
-	// );
-	// <View style={styles.container}>
-	// 	<View style={styles.containerInfo}>
-	// 		{/* <Text>{user.name}</Text>
-	// 		<Text>{user.email}</Text> */}
-
-	// 		{props.route.params.uid !== firebase.auth().currentUser.uid ? (
-	// 			<View>
-	// 				{following ? (
-	// 					<Button
-	// 						title="Following"
-	// 						onPress={() => onUnfollow()}
-	// 					/>
-	// 				) : (
-	// 					<Button title="Follow" onPress={() => onFollow()} />
-	// 				)}
-	// 			</View>
-	// 		) : (
-	// 			<Button title="Logout" onPress={() => onLogout()} />
-	// 		)}
-	// 	</View>
-
-	// 	<View style={styles.containerGallery}>
-	// 		<FlatList
-	// 			numColumns={3}
-	// 			horizontal={false}
-	// 			data={props.posts}
-	// 			renderItem={({ item }) => (
-	// 				<View style={styles.containerImage}>
-	// 					<Image
-	// 						style={styles.image}
-	// 						source={{ uri: item.downloadURL }}
-	// 					/>
-	// 				</View>
-	// 			)}
-	// 		/>
-	// 	</View>
-	// </View>
+			)}
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({

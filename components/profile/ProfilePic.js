@@ -1,26 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, Button } from "react-native";
+import { useSelector } from "react-redux";
+import {
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	FlatList,
+	Button,
+	TouchableOpacity,
+} from "react-native";
 import background from "../../assets/background.jpg";
 
-export default function ProfilePic({ navigation, userImage }) {
-	console.log("userImage", userImage);
+export default function ProfilePic({ navigation }) {
+	console.log("navigation", navigation);
+	const userImage = useSelector((state) => {
+		return state.userState.userPic;
+	});
+
 	return userImage ? (
-		<View>
+		<TouchableOpacity
+			title="Edit Profile"
+			onPress={() => navigation.navigate("ProfileEditor")}
+		>
 			<Image
-				source={{ uri: userImage.image }}
+				source={{ uri: userImage.userPic }}
 				style={{
 					width: 100,
 					height: 100,
 					borderRadius: 50,
 				}}
 			/>
-		</View>
+		</TouchableOpacity>
 	) : (
-		<View>
+		<TouchableOpacity
+			title="Edit Profile"
+			onPress={() => navigation.navigate("ProfileEditor")}
+		>
 			<Image
-				source={{ uri: background }}
+				source={{ uri: "../../assets/background.jpg" }}
 				style={{ width: 100, height: 100, borderRadius: 50 }}
 			/>
-		</View>
+		</TouchableOpacity>
 	);
 }

@@ -10,6 +10,7 @@ import {
 	fetchUserPosts,
 	fetchUserFollowing,
 	fetchUsersData,
+	fetchUserPic,
 	// clearData,
 } from "../redux/actions/index";
 
@@ -31,6 +32,7 @@ export default function Main({ navigation }) {
 		try {
 			dispatch(fetchUser());
 			dispatch(fetchUserBio());
+			dispatch(fetchUserPic());
 			// dispatch(fetchUserFollowing());
 		} catch (error) {
 			console.log(error);
